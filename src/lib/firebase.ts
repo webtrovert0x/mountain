@@ -2,15 +2,14 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
-// Firebase project owned by user account.
 const firebaseConfig = {
-  apiKey: "AIzaSyCZyRvdw0xPxdb8sUPFUjchWeudNwlX8nU",
-  authDomain: "mountain-web-59904.firebaseapp.com",
-  projectId: "mountain-web-59904",
-  storageBucket: "mountain-web-59904.firebasestorage.app",
-  messagingSenderId: "1084317764233",
-  appId: "1:1084317764233:web:2263398caf8c8fc8dfd458",
-  measurementId: "G-MBYEL4WLS3",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
 const app = initializeApp(firebaseConfig);
