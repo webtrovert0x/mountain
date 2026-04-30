@@ -128,7 +128,6 @@ export default function Messages() {
                     Watch Full Sermon
                   </a>
                 )}
-
               </div>
             </div>
           ))}

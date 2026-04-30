@@ -298,117 +298,117 @@ export default function Admin() {
       </div>
 
       <div className="grid md:grid-cols-2 gap-8">
-      <div className="bg-white p-6 rounded-2xl shadow-sm border border-[var(--color-gold-light)] bg-opacity-20">
-        <h3 className="text-xl font-bold mb-4">Post a New Sermon</h3>
-        <form onSubmit={handleAddSermon} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Sermon Title
-            </label>
-            <input
-              type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              required
-              className="mt-1 w-full rounded-md shadow-sm p-3 border border-gray-300 focus:border-[var(--color-gold)]"
-              placeholder="e.g. The Power of Grace"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Message Link (YouTube, Facebook, etc) - Optional
-            </label>
-            <input
-              type="url"
-              value={videoUrl}
-              onChange={(e) => setVideoUrl(e.target.value)}
-              className="mt-1 w-full rounded-md shadow-sm p-3 border border-gray-300 focus:border-[var(--color-gold)]"
-              placeholder="https://youtube.com/..."
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Description / Summary
-            </label>
-            <textarea
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              required
-              rows={4}
-              className="mt-1 w-full rounded-md shadow-sm p-3 border border-gray-300 focus:border-[var(--color-gold)]"
-              placeholder="Summarize the core message..."
-            ></textarea>
-          </div>
-          <button
-            type="submit"
-            className="w-full bg-[var(--color-gold)] text-white font-bold py-3 px-4 rounded-lg hover:bg-[var(--color-gold-dark)] transition"
-          >
-            Publish Sermon to Website
-          </button>
-        </form>
-      </div>
+        <div className="bg-white p-6 rounded-2xl shadow-sm border border-[var(--color-gold-light)] bg-opacity-20">
+          <h3 className="text-xl font-bold mb-4">Post a New Sermon</h3>
+          <form onSubmit={handleAddSermon} className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Sermon Title
+              </label>
+              <input
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                required
+                className="mt-1 w-full rounded-md shadow-sm p-3 border border-gray-300 focus:border-[var(--color-gold)]"
+                placeholder="e.g. The Power of Grace"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Message Link (YouTube, Facebook, etc) - Optional
+              </label>
+              <input
+                type="url"
+                value={videoUrl}
+                onChange={(e) => setVideoUrl(e.target.value)}
+                className="mt-1 w-full rounded-md shadow-sm p-3 border border-gray-300 focus:border-[var(--color-gold)]"
+                placeholder="https://youtube.com/..."
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Description / Summary
+              </label>
+              <textarea
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                required
+                rows={4}
+                className="mt-1 w-full rounded-md shadow-sm p-3 border border-gray-300 focus:border-[var(--color-gold)]"
+                placeholder="Summarize the core message..."
+              ></textarea>
+            </div>
+            <button
+              type="submit"
+              className="w-full bg-[var(--color-gold)] text-white font-bold py-3 px-4 rounded-lg hover:bg-[var(--color-gold-dark)] transition"
+            >
+              Publish Sermon to Website
+            </button>
+          </form>
+        </div>
 
-      <div className="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm h-fit max-h-[700px] overflow-y-auto">
-        <h3 className="text-xl font-bold mb-4">
-          Manage Live Sermons ({sermons.length})
-        </h3>
-        {sermons.length === 0 ? (
-          <div className="text-center py-10 bg-gray-50 rounded-xl">
-            <p className="text-gray-500">No sermons have been posted yet.</p>
-            <p className="text-xs text-gray-400 mt-2">
-              Use the form to upload your first message.
-            </p>
-          </div>
-        ) : (
-          <div className="space-y-4">
-            {sermons.map((sermon) => (
-              <div
-                key={sermon.id}
-                className="bg-gray-50 p-4 rounded-lg border border-gray-100 flex justify-between items-start gap-4"
-              >
-                <div className="flex-1 overflow-hidden">
-                  <h4 className="font-bold text-gray-900 truncate">
-                    {sermon.title}
-                  </h4>
-                  <p className="text-xs font-medium text-[var(--color-gold-dark)] mb-2">
-                    {new Date(sermon.date).toLocaleString(undefined, {
-                      year: "numeric",
-                      month: "short",
-                      day: "numeric",
-                      hour: "numeric",
-                      minute: "2-digit",
-                    })}
-                  </p>
-                  <p className="text-sm text-gray-600 line-clamp-2 mb-2">
-                    {sermon.description}
-                  </p>
-                  <p className="text-xs font-semibold text-gray-500 mb-2 inline-flex items-center gap-1">
-                    <Eye size={12} />
-                    {sermon.viewCount ?? 0} total views
-                  </p>
-                  {sermon.videoUrl && (
-                    <a
-                      href={sermon.videoUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-xs text-blue-600 hover:underline inline-block truncate max-w-full"
-                    >
-                      {sermon.videoUrl}
-                    </a>
-                  )}
-                </div>
-                <button
-                  onClick={() => void handleDeleteSermon(sermon.id)}
-                  className="text-red-500 hover:bg-red-100 p-2 rounded-lg transition"
-                  title="Delete Sermon"
+        <div className="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm h-fit max-h-[700px] overflow-y-auto">
+          <h3 className="text-xl font-bold mb-4">
+            Manage Live Sermons ({sermons.length})
+          </h3>
+          {sermons.length === 0 ? (
+            <div className="text-center py-10 bg-gray-50 rounded-xl">
+              <p className="text-gray-500">No sermons have been posted yet.</p>
+              <p className="text-xs text-gray-400 mt-2">
+                Use the form to upload your first message.
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {sermons.map((sermon) => (
+                <div
+                  key={sermon.id}
+                  className="bg-gray-50 p-4 rounded-lg border border-gray-100 flex justify-between items-start gap-4"
                 >
-                  <Trash2 size={20} />
-                </button>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+                  <div className="flex-1 overflow-hidden">
+                    <h4 className="font-bold text-gray-900 truncate">
+                      {sermon.title}
+                    </h4>
+                    <p className="text-xs font-medium text-[var(--color-gold-dark)] mb-2">
+                      {new Date(sermon.date).toLocaleString(undefined, {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                        hour: "numeric",
+                        minute: "2-digit",
+                      })}
+                    </p>
+                    <p className="text-sm text-gray-600 line-clamp-2 mb-2">
+                      {sermon.description}
+                    </p>
+                    <p className="text-xs font-semibold text-gray-500 mb-2 inline-flex items-center gap-1">
+                      <Eye size={12} />
+                      {sermon.viewCount ?? 0} total views
+                    </p>
+                    {sermon.videoUrl && (
+                      <a
+                        href={sermon.videoUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-xs text-blue-600 hover:underline inline-block truncate max-w-full"
+                      >
+                        {sermon.videoUrl}
+                      </a>
+                    )}
+                  </div>
+                  <button
+                    onClick={() => void handleDeleteSermon(sermon.id)}
+                    className="text-red-500 hover:bg-red-100 p-2 rounded-lg transition"
+                    title="Delete Sermon"
+                  >
+                    <Trash2 size={20} />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
