@@ -1,13 +1,17 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+    function currentViewCount(data) {
+      return data.keys().hasAny(['viewCount']) ? data.viewCount : 0;
+    }
+
     // Public read access for website visitors.
     match /sermons/{docId} {
       allow read: if true;
       allow create, delete: if request.auth != null;
       allow update: if request.auth != null || (
         request.resource.data.diff(resource.data).changedKeys().hasOnly(['viewCount']) &&
-        request.resource.data.viewCount == resource.data.viewCount + 1
+        request.resource.data.viewCount == currentViewCount(resource.data) + 1
       );
     }
 
