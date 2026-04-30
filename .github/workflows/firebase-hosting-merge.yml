@@ -15,6 +15,15 @@ jobs:
       - uses: actions/checkout@v5
       - run: npm install
       - run: npm run build
+      - name: Write Firebase service account
+        run: |
+          cat > "$HOME/firebase-service-account.json" <<'EOF'
+          ${{ secrets.FIREBASE_SERVICE_ACCOUNT_MOUNTAIN_WEB_59904 }}
+          EOF
+      - name: Deploy Firestore rules
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: $HOME/firebase-service-account.json
+        run: npx firebase-tools@latest deploy --only firestore:rules --project mountain-web-59904 --non-interactive
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
