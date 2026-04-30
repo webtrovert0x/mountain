@@ -3,9 +3,11 @@ import {
   collection,
   deleteDoc,
   doc,
+  increment,
   onSnapshot,
   orderBy,
   query,
+  updateDoc,
   setDoc,
 } from "firebase/firestore";
 import { db } from "./firebase";
@@ -16,6 +18,7 @@ export type SermonRecord = {
   date: string;
   videoUrl: string;
   description: string;
+  viewCount?: number;
 };
 
 export type EventRecord = {
@@ -29,7 +32,16 @@ export type EventRecord = {
 };
 
 export const addSermon = async (payload: Omit<SermonRecord, "id">) => {
-  await addDoc(collection(db, "sermons"), payload);
+  await addDoc(collection(db, "sermons"), {
+    ...payload,
+    viewCount: payload.viewCount ?? 0,
+  });
+};
+
+export const incrementSermonView = async (id: string) => {
+  await updateDoc(doc(db, "sermons", id), {
+    viewCount: increment(1),
+  });
 };
 
 export const removeSermon = async (id: string) => {

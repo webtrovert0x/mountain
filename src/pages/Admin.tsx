@@ -24,6 +24,7 @@ export interface Sermon {
   date: string;
   videoUrl: string;
   description: string;
+  viewCount?: number;
 }
 
 export interface ChurchEvent {
@@ -63,6 +64,11 @@ export default function Admin() {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showSettingsPasswords, setShowSettingsPasswords] = useState(false);
+
+  const totalSermonViews = sermons.reduce(
+    (sum, sermon) => sum + (sermon.viewCount ?? 0),
+    0,
+  );
 
   useEffect(() => {
     const unsubSermons = subscribeSermons(
@@ -275,7 +281,23 @@ export default function Admin() {
   );
 
   const sermonsPanel = (
-    <div className="grid md:grid-cols-2 gap-8">
+    <div className="space-y-6">
+      <div className="grid md:grid-cols-2 gap-4">
+        <div className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
+          <p className="text-sm text-gray-500 font-medium">Total sermons</p>
+          <p className="text-3xl font-bold text-[var(--color-gold-dark)] mt-2">
+            {sermons.length}
+          </p>
+        </div>
+        <div className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
+          <p className="text-sm text-gray-500 font-medium">Total views</p>
+          <p className="text-3xl font-bold text-[var(--color-gold-dark)] mt-2">
+            {totalSermonViews}
+          </p>
+        </div>
+      </div>
+
+      <div className="grid md:grid-cols-2 gap-8">
       <div className="bg-white p-6 rounded-2xl shadow-sm border border-[var(--color-gold-light)] bg-opacity-20">
         <h3 className="text-xl font-bold mb-4">Post a New Sermon</h3>
         <form onSubmit={handleAddSermon} className="space-y-4">
@@ -360,6 +382,10 @@ export default function Admin() {
                   <p className="text-sm text-gray-600 line-clamp-2 mb-2">
                     {sermon.description}
                   </p>
+                  <p className="text-xs font-semibold text-gray-500 mb-2 inline-flex items-center gap-1">
+                    <Eye size={12} />
+                    {sermon.viewCount ?? 0} total views
+                  </p>
                   {sermon.videoUrl && (
                     <a
                       href={sermon.videoUrl}
@@ -382,6 +408,7 @@ export default function Admin() {
             ))}
           </div>
         )}
+      </div>
       </div>
     </div>
   );

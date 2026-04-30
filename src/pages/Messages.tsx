@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
-import { Play, Calendar, Video } from "lucide-react";
+import { Play, Calendar, Video, Eye, X } from "lucide-react";
 import type { Sermon } from "./Admin";
-import { subscribeSermons } from "../lib/firestore";
+import { incrementSermonView, subscribeSermons } from "../lib/firestore";
 
 export default function Messages() {
   const [sermons, setSermons] = useState<Sermon[]>([]);
+  const [selectedSermon, setSelectedSermon] = useState<Sermon | null>(null);
 
   useEffect(() => {
     const unsub = subscribeSermons(
@@ -13,6 +14,19 @@ export default function Messages() {
     );
     return () => unsub();
   }, []);
+
+  const handleToggleViewMore = async (sermonId: string) => {
+    const sermon = sermons.find((item) => item.id === sermonId);
+    if (!sermon) return;
+
+    setSelectedSermon(sermon);
+
+    try {
+      await incrementSermonView(sermonId);
+    } catch {
+      // Keep the UI working even if the view counter cannot be updated.
+    }
+  };
 
   return (
     <div className="container mx-auto px-4 py-16 max-w-6xl mt-4">
@@ -82,11 +96,26 @@ export default function Messages() {
                 </h3>
 
                 <p
-                  className="text-gray-600 mb-8 flex-1 whitespace-pre-line line-clamp-4"
+                  className="text-gray-600 mb-4 flex-1 whitespace-pre-line line-clamp-4"
                   title={sermon.description}
                 >
                   {sermon.description}
                 </p>
+
+                <div className="flex items-center justify-between gap-3 mb-5 text-sm text-gray-500">
+                  <span className="inline-flex items-center gap-1 font-medium">
+                    <Eye className="w-4 h-4" />
+                    {sermon.viewCount ?? 0} views
+                  </span>
+
+                  <button
+                    type="button"
+                    onClick={() => void handleToggleViewMore(sermon.id)}
+                    className="inline-flex items-center gap-1 text-[var(--color-gold-dark)] font-bold hover:text-[var(--color-gold)] transition"
+                  >
+                    View more
+                  </button>
+                </div>
 
                 {sermon.videoUrl && (
                   <a
@@ -99,9 +128,62 @@ export default function Messages() {
                     Watch Full Sermon
                   </a>
                 )}
+
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {selectedSermon && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4 py-8">
+          <div className="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-3xl bg-white shadow-2xl">
+            <button
+              type="button"
+              onClick={() => setSelectedSermon(null)}
+              className="absolute right-4 top-4 rounded-full bg-gray-100 p-2 text-gray-600 hover:bg-gray-200 hover:text-gray-900"
+              aria-label="Close sermon"
+            >
+              <X className="h-5 w-5" />
+            </button>
+
+            <div className="bg-gradient-to-br from-[var(--color-gold-dark)] to-black px-6 py-12 text-white sm:px-10">
+              <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-xs font-bold uppercase tracking-widest">
+                <Calendar className="h-3 w-3" />
+                {new Date(selectedSermon.date).toLocaleString(undefined, {
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                  hour: "numeric",
+                  minute: "2-digit",
+                })}
+              </div>
+              <h2 className="text-3xl font-bold leading-tight sm:text-4xl">
+                {selectedSermon.title}
+              </h2>
+              <p className="mt-3 max-w-2xl text-white/85">
+                {selectedSermon.viewCount ?? 0} views
+              </p>
+            </div>
+
+            <div className="space-y-6 px-6 py-8 sm:px-10">
+              <p className="whitespace-pre-line text-gray-700 leading-relaxed">
+                {selectedSermon.description}
+              </p>
+
+              {selectedSermon.videoUrl && (
+                <a
+                  href={selectedSermon.videoUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-[var(--color-gold-dark)] px-5 py-3 font-bold text-white transition hover:bg-[var(--color-gold)]"
+                >
+                  <Play className="h-4 w-4" />
+                  Watch Full Sermon
+                </a>
+              )}
+            </div>
+          </div>
         </div>
       )}
     </div>
