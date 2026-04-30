@@ -5,7 +5,10 @@ import { incrementSermonView, subscribeSermons } from "../lib/firestore";
 
 export default function Messages() {
   const [sermons, setSermons] = useState<Sermon[]>([]);
-  const [selectedSermon, setSelectedSermon] = useState<Sermon | null>(null);
+  const [selectedSermonId, setSelectedSermonId] = useState<string | null>(null);
+
+  const selectedSermon =
+    sermons.find((sermon) => sermon.id === selectedSermonId) ?? null;
 
   useEffect(() => {
     const unsub = subscribeSermons(
@@ -19,7 +22,7 @@ export default function Messages() {
     const sermon = sermons.find((item) => item.id === sermonId);
     if (!sermon) return;
 
-    setSelectedSermon(sermon);
+    setSelectedSermonId(sermonId);
 
     try {
       await incrementSermonView(sermonId);
@@ -139,7 +142,7 @@ export default function Messages() {
           <div className="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-3xl bg-white shadow-2xl">
             <button
               type="button"
-              onClick={() => setSelectedSermon(null)}
+              onClick={() => setSelectedSermonId(null)}
               className="absolute right-4 top-4 rounded-full bg-gray-100 p-2 text-gray-600 hover:bg-gray-200 hover:text-gray-900"
               aria-label="Close sermon"
             >
