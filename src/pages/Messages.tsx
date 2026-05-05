@@ -26,7 +26,9 @@ export default function Messages() {
 
     try {
       await incrementSermonView(sermonId);
-    } catch {
+      console.log("Increment successful!");
+    } catch (err) {
+      console.error("Error in handleToggleViewMore:", err);
       // Keep the UI working even if the view counter cannot be updated.
     }
   };
